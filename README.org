@@ -1,0 +1,48 @@
+#+TITLE: thuli
+
+A hello-world Futhark project.
+
+* Local usage
+
+#+begin_src shell
+make compile  # compile to bin/main
+make run      # compile if needed, then run
+make test     # run tests
+make clean    # remove compiler artifacts
+#+end_src
+
+* Docker usage
+
+Builds use =docker buildx= with a per-project cache under
+=/lm/users/arul/docker-cache/thuli/= so build layers are stored outside
+Docker's default directory (=/var/lib/docker=).
+
+The Futhark program is compiled to =bin/main= during the image build,
+so =docker-run= starts immediately with no compile step.
+
+#+begin_src shell
+make docker-build   # build image (runs tests and compile during build)
+make docker-run     # run precompiled hello world
+make docker-test    # run tests in a container
+#+end_src
+
+Override the cache location or Docker binary:
+
+#+begin_src shell
+make docker-build DOCKER_CACHE_DIR=/path/to/cache
+make docker-build DOCKER=/usr/bin/docker
+#+end_src
+
+The final image (=thuli:latest=) is still loaded into the local Docker
+engine and can be run with =docker compose=:
+
+#+begin_src shell
+docker compose run --rm thuli
+#+end_src
+
+* Project layout
+
+- =lib/github.com/arul/thuli/= :: library code
+- =programs/= :: entry points
+- =tests/= :: =futhark test= suites
+- =futhark.pkg= :: package manifest

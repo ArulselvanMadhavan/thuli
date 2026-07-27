@@ -1,0 +1,9 @@
+.git
+.docker
+*.c
+*.h
+*.json
+*.py
+programs/main
+tests/hello_test
+bin/

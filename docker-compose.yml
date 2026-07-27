@@ -1,0 +1,4 @@
+services:
+  thuli:
+    build: .
+    image: thuli:latest

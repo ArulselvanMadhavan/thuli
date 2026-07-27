@@ -1,14 +1,16 @@
 #+TITLE: thuli
 
-A hello-world Futhark project.
+A Futhark tensor library project.
 
 * Local usage
 
 #+begin_src shell
-make compile  # compile to bin/main
-make run      # compile if needed, then run
-make test     # run tests
-make clean    # remove compiler artifacts
+make compile       # compile to bin/main
+make run           # compile if needed, then run
+make test          # run tests
+make check FILE=lib/github.com/ArulselvanMadhavan/thuli/tensor.fut  # type-check a file
+make check-changed # type-check all changed .fut files
+make clean         # remove compiler artifacts
 #+end_src
 
 * Docker usage
@@ -22,7 +24,7 @@ so =docker-run= starts immediately with no compile step.
 
 #+begin_src shell
 make docker-build   # build image (runs tests and compile during build)
-make docker-run     # run precompiled hello world
+make docker-run     # run precompiled entry point
 make docker-test    # run tests in a container
 #+end_src
 
@@ -42,7 +44,7 @@ docker compose run --rm thuli
 
 * Project layout
 
-- =lib/github.com/arul/thuli/= :: library code
+- =lib/github.com/ArulselvanMadhavan/thuli/= :: library code (=tensor.fut=, etc.)
 - =programs/= :: entry points
 - =tests/= :: =futhark test= suites
 - =futhark.pkg= :: package manifest

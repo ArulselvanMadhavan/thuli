@@ -4,7 +4,7 @@
 *.json
 *.py
 programs/main
-tests/hello_test
+tests/main_test
 bin/
 
 # Package manager (regenerated via: futhark pkg sync)

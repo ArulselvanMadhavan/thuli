@@ -2,7 +2,7 @@
 
 ARG FUTHARK_VERSION=0.26.4
 
-FROM debian:bookworm-slim AS base
+FROM debian:bookworm-slim
 
 ARG FUTHARK_VERSION
 
@@ -21,13 +21,7 @@ RUN curl -fsSL \
     | tar -xJ -C /usr/local/bin --strip-components=2 \
       "futhark-${FUTHARK_VERSION}-linux-x86_64/bin/futhark"
 
-FROM base AS test
-
 WORKDIR /app
 COPY . .
-RUN make test
-RUN make compile
 
-FROM test AS runtime
-
-CMD ["sh", "-c", "./bin/main </dev/null"]
+CMD ["/bin/bash"]

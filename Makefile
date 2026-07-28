@@ -56,7 +56,7 @@ docker-build:
 		.
 
 docker-run:
-	$(DOCKER) compose run --rm -T thuli
+	$(DOCKER) compose run --rm thuli
 
 docker-test:
 	$(DOCKER) compose run --rm thuli make test

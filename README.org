@@ -19,13 +19,21 @@ Builds use =docker buildx= with a per-project cache under
 =/lm/users/arul/docker-cache/thuli/= so build layers are stored outside
 Docker's default directory (=/var/lib/docker=).
 
-The Futhark program is compiled to =bin/main= during the image build,
-so =docker-run= starts immediately with no compile step.
+The image installs Futhark and copies the project source. Build and run
+inside the container shell:
 
 #+begin_src shell
-make docker-build   # build image (runs tests and compile during build)
-make docker-run     # run precompiled entry point
+make docker-build   # build dev image
+make docker-run     # open an interactive shell in the container
 make docker-test    # run tests in a container
+#+end_src
+
+Inside the container:
+
+#+begin_src shell
+make compile
+make run
+make test
 #+end_src
 
 Override the cache location or Docker binary:

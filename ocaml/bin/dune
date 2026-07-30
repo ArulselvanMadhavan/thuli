@@ -1,0 +1,6 @@
+(executable
+ (public_name thuli-ocaml)
+ (name main)
+ (libraries thuli)
+ (link_flags
+  (-cclib -Wl,-whole-archive -cclib -lthuli_stubs -cclib -Wl,-no-whole-archive)))

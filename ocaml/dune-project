@@ -1,0 +1,12 @@
+(lang dune 3.0)
+(name thuli)
+(generate_opam_files true)
+
+(package
+ (name thuli)
+ (synopsis "OCaml wrapper for thuli Futhark tensor kernels")
+ (depends
+  (ocaml (>= 5.0))
+  (dune (>= 3.0))
+  ctypes
+  ctypes-foreign))

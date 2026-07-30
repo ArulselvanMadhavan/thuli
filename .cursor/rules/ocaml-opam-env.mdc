@@ -1,0 +1,48 @@
+---
+description: Instantiate OPAMROOT and OCaml 5.5.0 switch before OCaml/dune work
+globs: ocaml/**/*
+alwaysApply: false
+---
+
+# OCaml opam environment
+
+Before running `dune`, `ocaml`, `opam install`, or other OCaml tooling for this repo, instantiate the project opam environment:
+
+```bash
+export OPAMROOT="/lm/users/arul/.opam"
+eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
+```
+
+## Makefile defaults
+
+The root `Makefile` uses the same values for `make ocaml` and `make ocaml-run`:
+
+- `OPAMROOT ?= /lm/users/arul/.opam`
+- `OCAML_SWITCH ?= 5.5.0`
+
+Prefer `make ocaml` / `make ocaml-run` from the repo root when possible; they apply opam env automatically.
+
+## First-time setup
+
+If switch `5.5.0` does not exist:
+
+```bash
+export OPAMROOT="/lm/users/arul/.opam"
+opam switch create 5.5.0 ocaml-base-compiler.5.5.0
+eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
+opam install dune ctypes ctypes-foreign
+```
+
+## Build flow
+
+1. `make kron-lib` — generate Futhark C library and copy to `ocaml/thuli/kron.c`
+2. `make ocaml` — build the OCaml library under `ocaml/`
+3. `make ocaml-run` — build and run `ocaml/bin/main.exe`
+
+Run `make kron-lib` before `make ocaml` when `programs/kron.fut` or library `.fut` sources change.
+
+## Verification
+
+After editing OCaml files, run `make ocaml`. If runtime behavior changed, also run `make ocaml-run`.
+
+Do not assume a global/default opam switch; always set `OPAMROOT` and use switch `5.5.0`.

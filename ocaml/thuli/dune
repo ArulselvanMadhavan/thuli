@@ -1,0 +1,13 @@
+(copy_files# ../../bin/libkron.h)
+
+(library
+ (name thuli)
+ (public_name thuli)
+ (modules thuli_tensor kron bindings)
+ (wrapped false)
+ (libraries ctypes ctypes.foreign)
+ (foreign_stubs
+  (language c)
+  (names kron)
+  (flags (:standard -I../../bin -O3 -fPIC)))
+ (c_library_flags (-lm -lpthread)))

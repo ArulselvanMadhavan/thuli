@@ -8,6 +8,8 @@ module type ND_TENSOR = {
 
   val get_data [size] [rank] : tensor [size] [rank] -> [size]t
 
+  val get [size] [rank] : tensor [size] [rank] -> [rank]i64 -> t
+
   val flat_offset [rank] : [rank]i64 -> [rank]i64 -> i64
 
   val unflat_offset [rank] : [rank]i64 -> i64 -> [rank]i64
@@ -40,4 +42,7 @@ module NdTensor (E: {type t}) : ND_TENSOR with t = E.t = {
         let idx = rem % dim
         in (rem / dim, accs with [i] = idx)
     in idxs
+
+  def get [size] [rank] (tens: tensor [size] [rank]) (idx: [rank]i64) : t =
+    tens.data[i32.i64 (flat_offset tens.shape idx)]
 }

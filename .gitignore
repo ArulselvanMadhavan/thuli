@@ -5,7 +5,11 @@
 *.py
 programs/main
 tests/main_test
-bin/
+/bin/
+
+# OCaml
+ocaml/_build/
+ocaml/thuli/kron.c
 
 # Package manager (regenerated via: futhark pkg sync)
 lib~new/

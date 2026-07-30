@@ -9,9 +9,32 @@ DOCKER_IMAGE := thuli:latest
 DOCKER_CACHE_DIR ?= /lm/users/arul/docker-cache/thuli
 DOCKER ?= /bin/docker
 
-.PHONY: run test compile check check-changed clean docker-build docker-run docker-test
+OPAMROOT ?= /lm/users/arul/.opam
+OCAML_SWITCH ?= 5.5.0
+OPAM_ENV = eval $$(OPAMROOT=$(OPAMROOT) opam env --switch=$(OCAML_SWITCH))
+
+KRON_LIB := bin/libkron
+KRON_FUT := programs/kron.fut
+OCAML_KRON_C := ocaml/thuli/kron.c
+
+.PHONY: run test compile check check-changed clean docker-build docker-run docker-test kron-lib ocaml ocaml-run
 
 compile: $(BIN)
+
+kron-lib: $(KRON_LIB).c $(OCAML_KRON_C)
+
+$(KRON_LIB).c: $(KRON_FUT) $(LIB_SOURCES)
+	mkdir -p bin
+	$(FUTHARK) c --library -o $(KRON_LIB) $(KRON_FUT)
+
+$(OCAML_KRON_C): $(KRON_LIB).c
+	cp $(KRON_LIB).c $(OCAML_KRON_C)
+
+ocaml: kron-lib
+	$(OPAM_ENV) && cd ocaml && dune build
+
+ocaml-run: ocaml
+	$(OPAM_ENV) && cd ocaml && dune exec ./bin/main.exe
 
 $(BIN): $(PROGRAM) $(LIB_SOURCES)
 	mkdir -p bin
@@ -45,6 +68,8 @@ clean:
 	find programs tests -type f \( -name '*.c' -o -name '*.h' -o -name '*.json' -o -name '*.py' \) -delete
 	rm -f programs/main programs/tests/main_test
 	rm -rf bin
+	rm -f ocaml/thuli/kron.c
+	cd ocaml && dune clean 2>/dev/null || true
 
 docker-build:
 	mkdir -p $(DOCKER_CACHE_DIR)

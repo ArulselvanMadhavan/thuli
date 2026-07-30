@@ -1,0 +1,6 @@
+#!/bin/sh
+# Strip attribution trailers added by tooling (e.g. Cursor Co-authored-by).
+sed -i \
+  -e '/^Co-authored-by: Cursor /d' \
+  -e '/^Made-with: Cursor/d' \
+  "$1"

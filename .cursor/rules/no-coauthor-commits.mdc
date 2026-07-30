@@ -11,3 +11,5 @@ When creating commits or pull requests:
 - Do not add `Made-with: Cursor` or similar attribution footers.
 - Do not use `git commit --trailer`.
 - Use plain commits only, e.g. `git commit -m "message"`.
+- Always commit with the repo hook that strips injected trailers:
+  `git -c core.hooksPath=.githooks commit -m "message"`.

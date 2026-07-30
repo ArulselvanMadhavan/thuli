@@ -155,6 +155,8 @@ import "tensor"
 
 - Do not add `Co-authored-by:`, `Made-with: Cursor`, or other attribution trailers.
 - Use plain `git commit -m "..."` only (no `--trailer`).
+- Always commit via the repo hook: `git -c core.hooksPath=.githooks commit -m "..."`.
+  The hook strips any `Co-authored-by: Cursor` trailer injected by tooling.
 
 ### Verification checklist
 

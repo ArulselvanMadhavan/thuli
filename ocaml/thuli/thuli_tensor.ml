@@ -1,34 +1,39 @@
-type c64 = { re : float; im : float }
+open Bigarray
 
-type tensor = {
-  shape : int64 array;
-  data : c64 array;
-}
+type i64_arr = Kron.i64_arr
+type f32_arr = Kron.f32_arr
+type tensor = Kron.parts
 
-let c64_of_parts re im = { re; im }
+let rank = Kron.rank
+let size = Kron.size
+let shape_get = Kron.shape_get
+let make = Kron.make
 
-let tensor_of_parts shape re im =
-  let n = Array.length re in
-  if Array.length im <> n then invalid_arg "tensor_of_parts: length mismatch";
-  if n = 0 && Array.length shape <> 0 then
-    invalid_arg "tensor_of_parts: empty data";
-  { shape; data = Array.init n (fun i -> c64_of_parts re.(i) im.(i)) }
+let i64_arr_of_list xs =
+  let ba = Array1.create Int64 c_layout (List.length xs) in
+  List.iteri (fun i x -> ba.{i} <- x) xs;
+  ba
 
-let tensor_to_parts (t : tensor) : Kron.parts =
-  let re_data = Array.map (fun (c : c64) -> c.re) t.data in
-  let im_data = Array.map (fun (c : c64) -> c.im) t.data in
-  { shape = t.shape; re = re_data; im = im_data }
+let f32_arr_of_list xs =
+  let ba = Array1.create Float32 c_layout (List.length xs) in
+  List.iteri (fun i x -> ba.{i} <- x) xs;
+  ba
 
-let parts_to_tensor (p : Kron.parts) =
-  tensor_of_parts p.shape p.re p.im
+let make_complex ~shape ~re ~im =
+  make ~shape:(i64_arr_of_list shape) ~re:(f32_arr_of_list re)
+    ~im:(f32_arr_of_list im)
 
-let kron (a : tensor) (b : tensor) =
-  parts_to_tensor (Kron.kron_parts (tensor_to_parts a) (tensor_to_parts b))
+let kron = Kron.kron_parts
 
-let kpow (t : tensor) = function
+let kpow t = function
   | n when n < 0 -> invalid_arg "kpow: negative exponent"
   | 0 ->
-      { shape = Array.map (fun _ -> 1L) t.shape; data = [| c64_of_parts 1. 0. |] }
+      let rank_n = rank t in
+      let shape = Array1.create Int64 c_layout rank_n in
+      for i = 0 to rank_n - 1 do
+        shape.{i} <- 1L
+      done;
+      make ~shape ~re:(f32_arr_of_list [ 1. ]) ~im:(f32_arr_of_list [ 0. ])
   | 1 -> t
   | n ->
       let rec loop i acc =

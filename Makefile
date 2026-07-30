@@ -17,7 +17,7 @@ KRON_LIB := bin/libkron
 KRON_FUT := programs/kron.fut
 OCAML_KRON_C := ocaml/thuli/kron.c
 
-.PHONY: run test compile check check-changed clean docker-build docker-run docker-test kron-lib ocaml ocaml-run
+.PHONY: run test compile check check-changed clean docker-build docker-run docker-test kron-lib ocaml ocaml-run perf-ocaml
 
 compile: $(BIN)
 
@@ -35,6 +35,9 @@ ocaml: kron-lib
 
 ocaml-run: ocaml
 	$(OPAM_ENV) && cd ocaml && dune exec ./bin/main.exe
+
+perf-ocaml:
+	./scripts/perf-ocaml.sh record --build
 
 $(BIN): $(PROGRAM) $(LIB_SOURCES)
 	mkdir -p bin

@@ -17,3 +17,6 @@ lib~old/
 
 # Docker
 .docker/
+
+# perf (scripts/perf-ocaml.sh)
+perf/

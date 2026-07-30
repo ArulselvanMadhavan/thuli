@@ -29,6 +29,7 @@ make clean         # remove build artifacts
 make kron-lib      # compile programs/kron.fut to bin/libkron.{c,h}
 make ocaml         # build OCaml library (requires opam env; see below)
 make ocaml-run     # build and run ocaml/bin/main.exe demo
+make perf-ocaml    # perf record of OCaml demo (see docs/perf.md)
 ```
 
 Docker:

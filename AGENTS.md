@@ -30,6 +30,7 @@ make kron-lib      # compile programs/kron.fut to bin/libkron.{c,h}
 make ocaml         # build OCaml library (requires opam env; see below)
 make ocaml-run     # build and run ocaml/bin/main.exe demo
 make perf-ocaml    # perf record of OCaml demo (see docs/perf.md)
+make install       # one-click setup on a new machine (see scripts/install.sh)
 ```
 
 Docker:
@@ -45,21 +46,35 @@ make docker-test
 Use this opam root and switch for all OCaml/dune work in this repo:
 
 ```bash
-export OPAMROOT="/lm/users/arul/.opam"
+source scripts/env.sh
+```
+
+Or manually:
+
+```bash
+export OPAMROOT="${OPAMROOT:-$HOME/.opam}"
 eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
 ```
 
 Makefile targets (`make ocaml`, `make ocaml-run`) set these automatically via:
 
-- `OPAMROOT ?= /lm/users/arul/.opam`
+- `OPAMROOT ?= $(HOME)/.opam`
 - `OCAML_SWITCH ?= 5.5.0`
 
-### First-time setup
+### New machine setup
+
+```bash
+./scripts/install.sh    # Futhark + opam + verify (make test, make ocaml-run)
+# or: make install
+source scripts/env.sh
+```
+
+### First-time setup (manual)
 
 Create the switch and install build deps if missing:
 
 ```bash
-export OPAMROOT="/lm/users/arul/.opam"
+export OPAMROOT="${OPAMROOT:-$HOME/.opam}"
 opam switch create 5.5.0 ocaml-base-compiler.5.5.0
 eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
 opam install dune ctypes ctypes-foreign
@@ -70,8 +85,7 @@ opam install dune ctypes ctypes-foreign
 Always instantiate the opam environment in the current shell before `dune`, `ocaml`, or `opam` commands outside `make`:
 
 ```bash
-export OPAMROOT="/lm/users/arul/.opam"
-eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
+source scripts/env.sh
 cd ocaml && dune build
 ```
 
@@ -117,8 +131,7 @@ make check FILE=tests/main_test.fut
 Instantiate opam env, then build:
 
 ```bash
-export OPAMROOT="/lm/users/arul/.opam"
-eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
+source scripts/env.sh
 make ocaml
 ```
 

@@ -2,6 +2,23 @@
 
 A Futhark tensor library project.
 
+* New machine setup
+
+One-click install (Linux x86_64: system deps, Futhark, opam switch, smoke tests):
+
+#+begin_src shell
+./scripts/install.sh
+# or: make install
+#+end_src
+
+Then load the dev environment in each shell:
+
+#+begin_src shell
+source scripts/env.sh
+#+end_src
+
+Options: =./scripts/install.sh --help= (=--no-verify=, =--no-ocaml=, =--no-git=).
+
 * Local usage
 
 #+begin_src shell

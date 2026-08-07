@@ -4,7 +4,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OPAMROOT="${OPAMROOT:-/lm/users/arul/.opam}"
+OPAMROOT="${OPAMROOT:-${HOME}/.opam}"
 OCAML_SWITCH="${OCAML_SWITCH:-5.5.0}"
 BINARY="${ROOT}/ocaml/_build/default/bin/main.exe"
 DEFAULT_DATA="${ROOT}/perf/ocaml-main.data"

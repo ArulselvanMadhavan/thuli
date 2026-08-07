@@ -9,25 +9,31 @@ alwaysApply: false
 Before running `dune`, `ocaml`, `opam install`, or other OCaml tooling for this repo, instantiate the project opam environment:
 
 ```bash
-export OPAMROOT="/lm/users/arul/.opam"
-eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
+source scripts/env.sh
 ```
 
 ## Makefile defaults
 
 The root `Makefile` uses the same values for `make ocaml` and `make ocaml-run`:
 
-- `OPAMROOT ?= /lm/users/arul/.opam`
+- `OPAMROOT ?= $(HOME)/.opam`
 - `OCAML_SWITCH ?= 5.5.0`
 
 Prefer `make ocaml` / `make ocaml-run` from the repo root when possible; they apply opam env automatically.
 
-## First-time setup
+## New machine setup
+
+```bash
+./scripts/install.sh
+source scripts/env.sh
+```
+
+## First-time setup (manual)
 
 If switch `5.5.0` does not exist:
 
 ```bash
-export OPAMROOT="/lm/users/arul/.opam"
+export OPAMROOT="${OPAMROOT:-$HOME/.opam}"
 opam switch create 5.5.0 ocaml-base-compiler.5.5.0
 eval "$(OPAMROOT="$OPAMROOT" opam env --switch=5.5.0)"
 opam install dune ctypes ctypes-foreign

@@ -9,7 +9,7 @@ DOCKER_IMAGE := thuli:latest
 DOCKER_CACHE_DIR ?= /lm/users/arul/docker-cache/thuli
 DOCKER ?= /bin/docker
 
-OPAMROOT ?= /lm/users/arul/.opam
+OPAMROOT ?= $(HOME)/.opam
 OCAML_SWITCH ?= 5.5.0
 OPAM_ENV = eval $$(OPAMROOT=$(OPAMROOT) opam env --switch=$(OCAML_SWITCH))
 
@@ -17,7 +17,7 @@ KRON_LIB := bin/libkron
 KRON_FUT := programs/kron.fut
 OCAML_KRON_C := ocaml/thuli/kron.c
 
-.PHONY: run test compile check check-changed clean docker-build docker-run docker-test kron-lib ocaml ocaml-run perf-ocaml
+.PHONY: run test compile check check-changed clean docker-build docker-run docker-test kron-lib ocaml ocaml-run perf-ocaml install
 
 compile: $(BIN)
 
@@ -38,6 +38,9 @@ ocaml-run: ocaml
 
 perf-ocaml:
 	./scripts/perf-ocaml.sh record --build
+
+install:
+	./scripts/install.sh
 
 $(BIN): $(PROGRAM) $(LIB_SOURCES)
 	mkdir -p bin
